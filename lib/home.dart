@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
               Container(
                 height: 20,
               ),
-              Text(
+              const Text(
                 'Nkauj Qhuas Vajtswv',
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
@@ -69,12 +69,12 @@ class _HomeState extends State<Home> {
                   Column(
                     children: [
                       const Text(
-                        'Phau Nkauj Phau 45',
-                        style: TextStyle(
+                        'Phau Nkauj Phau 50',
+                        style: TextStyle( 
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                       songWidget("assets/images/image2.jpeg",
-                          "Phau Nkauj Phau 45", "45"),
+                          "Phau Nkauj Phau 50", "50"),
                     ],
                   )
                 ],
