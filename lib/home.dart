@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nkauj_qhuas_vajtswv/detail.dart';
+import 'package:nkauj_qhuas_vajtswv/fifty_detail.dart';
+import 'package:nkauj_qhuas_vajtswv/hundred_detail.dart';
+import 'package:nkauj_qhuas_vajtswv/hundred_old_detail.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -31,13 +33,13 @@ class _HomeState extends State<Home> {
                 text: TextSpan(
                   children: <TextSpan>[
                     TextSpan(
-                        text: 'Phau Ntawv Nkauj 47:6 ',
+                        text: 'Kaulauxais 3:16 ',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade600)),
                     TextSpan(
                         text:
-                            'Cia li hu nkauj qhuas Vajtswv, hu nkauj qhuas peb tus vajntxwv',
+                            'Thaum nej hu nkauj, tsis hais tej nkauj uas Daviv sau lossis tej nkauj qhuas Vajtswv lossis tej nkauj uas cov ntseeg ibtxwm hu qhuas Vajtswv, nej yuav tsum zoo siab hlo ua Vajtswv tsaug',
                         style: TextStyle(
                             fontWeight: FontWeight.normal,
                             color: Colors.grey.shade800)),
@@ -73,7 +75,7 @@ class _HomeState extends State<Home> {
                         style: TextStyle( 
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      songWidget("assets/images/image2.jpeg",
+                      songFiftyWidget("assets/images/image2.jpeg",
                           "Phau Nkauj Phau 50", "50"),
                     ],
                   )
@@ -90,7 +92,7 @@ class _HomeState extends State<Home> {
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      songWidget("assets/images/image3.jpeg",
+                      songNewHundredWidget("assets/images/image3.jpeg",
                           "Phau Nkauj 100 Tshiab", "tshiab"),
                     ],
                   ),
@@ -110,7 +112,7 @@ class _HomeState extends State<Home> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Detail(title: title, type: type),
+                builder: (context) => HundredOldDetail(title: title, type: type),
               ));
         },
         child: Container(
@@ -126,4 +128,55 @@ class _HomeState extends State<Home> {
           ),
         ));
   }
+
+
+  Widget songFiftyWidget(String image, String title, String type) {
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FiftyDetail(title: title, type: type),
+              ));
+        },
+        child: Container(
+          width: 150,
+          height: 150,
+          margin: const EdgeInsets.only(top: 10),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              image,
+              fit: BoxFit.fill,
+            ),
+          ),
+        ));
+  }
+
+  Widget songNewHundredWidget(String image, String title, String type) {
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HundredDetail(title: title, type: type),
+              ));
+        },
+        child: Container(
+          width: 150,
+          height: 150,
+          margin: const EdgeInsets.only(top: 10),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              image,
+              fit: BoxFit.fill,
+            ),
+          ),
+        ));
+  }
+
+
 }
+
+

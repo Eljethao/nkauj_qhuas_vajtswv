@@ -17,12 +17,11 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   String? path;
   PDFViewController? controller;
-  bool _isSearching = false;
-  int currentPage = 0;
   bool _isPdfReady = false;
   PdfDocument? _pdfDoc; // PdfDocument object for text extraction
-
-  List<int> _matchingPages = []; // Stores matching page numbers after search
+  int currentPage = 0;
+  List<Map<String, dynamic>> pageTitles = []; // List to store page titles and numbers
+  String _selectedTitle = ""; // Selected title from the dropdown
 
   @override
   void initState() {
@@ -36,6 +35,7 @@ class _DetailState extends State<Detail> {
       String _documentPath = '';
       if (widget.type == '50') {
         _documentPath = 'assets/files/50.pdf';
+        
       } else if (widget.type == 'tshiab') {
         _documentPath = 'assets/files/100-tshiab.pdf';
       } else {
@@ -50,6 +50,9 @@ class _DetailState extends State<Detail> {
 
       // Initialize PdfDocument for text extraction using Syncfusion
       _pdfDoc = PdfDocument(inputBytes: await file.readAsBytes());
+
+      // Populate titles and page numbers based on the first line of each page
+      _extractTitlesFromPages();
 
       setState(() {
         path = file.path;
@@ -79,36 +82,34 @@ class _DetailState extends State<Detail> {
     }
   }
 
-  // Function to search for a title or text using Syncfusion's PdfTextExtractor
-  void _searchText(String searchText) {
-    _matchingPages.clear(); // Clear previous search results
+  // Extract the first line (title) of each page
+  void _extractTitlesFromPages() {
+    pageTitles.clear();
     if (_pdfDoc != null) {
       // Iterate through all pages of the document
       for (int i = 0; i < _pdfDoc!.pages.count; i++) {
-        // Extract text from the current page using startPageIndex
+        // Extract text from the current page
         final String extractedText = PdfTextExtractor(_pdfDoc!).extractText(
-          startPageIndex: i, // Extract text from the current page
-          endPageIndex: i,   // Limit to the same page
+          startPageIndex: i,
+          endPageIndex: i,
         ) ?? '';
-        
-        // Search for the specific title in the extracted text
-        if (extractedText.contains(searchText)) {
-          _matchingPages.add(i + 1); // Store page number (i+1 as it's 1-based)
-        }
-      }
 
-      if (_matchingPages.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Pom nyob rau page(s): ${_matchingPages.join(", ")}')),
-        );
-        // Navigate to the first matching page where the title is found
-        controller?.setPage(_matchingPages.first - 1);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Nrhiav Tsis pom qhov koj sau !!!')),
-        );
+        // Split the extracted text into lines and take the first line as title
+        List<String> lines = extractedText.split('\n');
+        String firstLine = lines.firstWhere((line) => line.trim().isNotEmpty, orElse: () => 'No title on this page');
+
+        // Add the first line (title) and page number to the list
+        pageTitles.add({'title': firstLine, 'pageNumber': i + 1});
       }
     }
+  }
+
+  // Function to jump to the selected page in the PDF viewer
+  void _jumpToPage(int pageNumber, String title) {
+    setState(() {
+      _selectedTitle = title;
+    });
+    controller?.setPage(pageNumber - 1); // PDFView uses 0-based index, so subtract 1
   }
 
   @override
@@ -118,38 +119,28 @@ class _DetailState extends State<Detail> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.grey.shade300,
-        title: _isSearching
-            ? TextField(
-                decoration: InputDecoration(
-                  hintText: 'Nrhiav...',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(color: Colors.grey.shade800),
-                ),
-                style: TextStyle(color: Colors.grey.shade800),
-                onSubmitted: (value) {
-                  _searchText(value); // Perform search when text is submitted
-                },
-                textInputAction: TextInputAction.search,
-              )
-            : Text(widget.title, style: TextStyle(fontSize: 20, color: Colors.black)),
+        title: _isPdfReady
+            ? Text(_selectedTitle.isNotEmpty ? _selectedTitle : widget.title,
+                style: const TextStyle(fontSize: 20, color: Colors.black))
+            : const Text("Loading...", style: TextStyle(color: Colors.black)),
         actions: <Widget>[
-          _isSearching
-              ? IconButton(
-                  icon: Icon(Icons.cancel),
-                  onPressed: () {
-                    setState(() {
-                      _isSearching = false;
-                    });
-                  },
-                )
-              : IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      _isSearching = true;
-                    });
-                  },
-                ),
+          DropdownButton<String>(
+            hint: const Text("Select Title", style: TextStyle(color: Colors.black)),
+            value: null, // Ensure no pre-selected value
+            icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+            items: pageTitles.map((Map<String, dynamic> page) {
+              return DropdownMenuItem<String>(
+                value: page['title'],
+                child: Text(page['title']),
+              );
+            }).toList(),
+            onChanged: (String? selectedTitle) {
+              if (selectedTitle != null) {
+                int pageNumber = pageTitles.firstWhere((page) => page['title'] == selectedTitle)['pageNumber'];
+                _jumpToPage(pageNumber, selectedTitle);
+              }
+            },
+          ),
         ],
       ),
       body: _isPdfReady
