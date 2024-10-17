@@ -72,82 +72,6 @@ class _FiftyDetailState extends State<FiftyDetail> {
     }
   }
 
-  // Custom drop down display for the selected item
-  Widget _customDropDown(BuildContext context, Map<String, dynamic>? item) {
-    if (item == null) {
-      return Text(
-        "Select a title",
-        style: TextStyle(color: Colors.black54, fontSize: 16),
-      );
-    }
-
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.teal.shade50,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.teal.shade100,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-      child: Row(
-        children: [
-          Icon(Icons.book, color: Colors.teal),
-          SizedBox(width: 10),
-          Text(
-            item['title'],
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 16, color: Colors.teal),
-          ),
-          Spacer(),
-          Text(
-            'Page ${item['pageNumber']}',
-            style: TextStyle(color: Colors.grey.shade600),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Custom popup item display
-  Widget _customPopupItemBuilder(
-      BuildContext context, Map<String, dynamic> item, bool isSelected) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: Colors.grey.shade200),
-        ),
-        color: isSelected ? Colors.teal.shade50 : Colors.white,
-      ),
-      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-      child: Row(
-        children: [
-          Icon(
-            isSelected ? Icons.check_circle : Icons.book_outlined,
-            color: isSelected ? Colors.teal : Colors.grey,
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              item['title'],
-              style: TextStyle(
-                fontSize: 16,
-                color: isSelected ? Colors.teal.shade900 : Colors.black87,
-              ),
-            ),
-          ),
-          Text(
-            'Page ${item['pageNumber']}',
-            style: TextStyle(color: Colors.grey.shade600),
-          ),
-        ],
-      ),
-    );
-  }
 
   // Function to jump to the selected page in the PDF viewer
   void _jumpToPage({required int pageNumber}) {
@@ -165,7 +89,7 @@ class _FiftyDetailState extends State<FiftyDetail> {
       appBar: AppBar(
         title: Text(widget.title),
         centerTitle: true,
-        backgroundColor: Colors.blue.shade400,
+        backgroundColor: const Color(0xff52568F),
       ),
       body: _isPdfReady
           ? SafeArea(
@@ -191,12 +115,12 @@ class _FiftyDetailState extends State<FiftyDetail> {
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
                                       borderSide:
-                                          BorderSide(color: Colors.teal),
+                                          const BorderSide(color: Colors.teal),
                                     ),
-                                    contentPadding: EdgeInsets.symmetric(
+                                    contentPadding: const EdgeInsets.symmetric(
                                         vertical: 15.0, horizontal: 20.0),
                                     prefixIcon:
-                                        Icon(Icons.search, color: Colors.blue),
+                                        const Icon(Icons.search, color: Colors.blue),
                                   ),
                                 ),
                                 dialogProps: DialogProps(
@@ -207,7 +131,7 @@ class _FiftyDetailState extends State<FiftyDetail> {
                                   elevation: 8,
                                 ),
                               ),
-                              clearButtonProps: ClearButtonProps(
+                              clearButtonProps: const ClearButtonProps(
                                 isVisible: true,
                               ),
                               dropdownDecoratorProps: DropDownDecoratorProps(
@@ -240,16 +164,16 @@ class _FiftyDetailState extends State<FiftyDetail> {
                                     selectedTitle['pageNumber'] as int;
                                 _jumpToPage(pageNumber: _pageNumber);
                               },
-                              asyncItems: (String filter) async {
-                                // Filter the list based on search input
-                                return fiftyTitles
-                                    .where((titleMap) => titleMap['title']
-                                        .toLowerCase()
-                                        .contains(filter.toLowerCase()))
-                                    .map((titleMap) =>
-                                        titleMap['title'] as String)
-                                    .toList();
-                              },
+                              // asyncItems: (String filter) async {
+                              //   // Filter the list based on search input
+                              //   return fiftyTitles
+                              //       .where((titleMap) => titleMap['title']
+                              //           .toLowerCase()
+                              //           .contains(filter.toLowerCase()))
+                              //       .map((titleMap) =>
+                              //           titleMap['title'] as String)
+                              //       .toList();
+                              // },
                             ),
                           ),
                         ),

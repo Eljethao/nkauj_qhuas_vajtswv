@@ -27,16 +27,16 @@ class _HomeState extends State<Home> {
               ),
               const Text(
                 'Nkauj Qhuas Vajtswv',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xff52568F)),
               ),
               RichText(
                 text: TextSpan(
                   children: <TextSpan>[
-                    TextSpan(
+                    const TextSpan(
                         text: 'Kaulauxais 3:16 ',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey.shade600)),
+                            color: Color(0xff52568F))),
                     TextSpan(
                         text:
                             'Thaum nej hu nkauj, tsis hais tej nkauj uas Daviv sau lossis tej nkauj qhuas Vajtswv lossis tej nkauj uas cov ntseeg ibtxwm hu qhuas Vajtswv, nej yuav tsum zoo siab hlo ua Vajtswv tsaug',

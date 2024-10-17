@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Nkauj Qhuas Vajtswv',
       debugShowCheckedModeBanner: false,
-      
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'DefagoNotoSansLao'
