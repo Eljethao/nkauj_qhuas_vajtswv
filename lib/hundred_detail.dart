@@ -181,6 +181,7 @@ class _HundredDetailState extends State<HundredDetail> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DropdownSearch<String>(
+                              
                               popupProps: PopupProps.dialog(
                                 showSearchBox: true,
                                 searchFieldProps: TextFieldProps(
@@ -198,6 +199,7 @@ class _HundredDetailState extends State<HundredDetail> {
                                     prefixIcon:
                                         Icon(Icons.search, color: Colors.blue),
                                   ),
+                                  
                                 ),
                                 dialogProps: DialogProps(
                                   backgroundColor: Colors.white,
@@ -206,6 +208,7 @@ class _HundredDetailState extends State<HundredDetail> {
                                   ),
                                   elevation: 8,
                                 ),
+                                
                               ),
                               clearButtonProps: ClearButtonProps(
                                 isVisible: true,
@@ -228,10 +231,12 @@ class _HundredDetailState extends State<HundredDetail> {
                               items: newHundredTitles
                                   .map((title) => title['title'] as String)
                                   .toList(),
+                        
                               onChanged: (String? data) {
                                 // Find the map in newHundredTitles that corresponds to the selected title
-                                final selectedTitle = newHundredTitles.firstWhere(
-                                    (title) => title['title'] == data);
+                                final selectedTitle =
+                                    newHundredTitles.firstWhere(
+                                        (title) => title['title'] == data);
 
                                 // Now you can access the "pageNumber" value from the map
                                 print(
