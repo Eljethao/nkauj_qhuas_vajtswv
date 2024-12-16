@@ -1,30 +1,29 @@
 import 'dart:io';
+
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:nkauj_qhuas_vajtswv/helper/help.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 
-class HundredDetail extends StatefulWidget {
+class DetailPage extends StatefulWidget {
   final String title;
   final String type;
-  const HundredDetail({super.key, required this.title, required this.type});
+  const DetailPage({super.key, required this.title, required this.type});
 
   @override
-  State<HundredDetail> createState() => _HundredDetailState();
+  State<DetailPage> createState() => _DetailPageState();
 }
 
-class _HundredDetailState extends State<HundredDetail> {
+class _DetailPageState extends State<DetailPage> {
   String? path;
   PDFViewController? controller;
   bool _isPdfReady = false;
   PdfDocument? _pdfDoc; // PdfDocument object for text extraction
   int currentPage = 0;
-  List<Map<String, dynamic>> pageTitles =
-      []; // List to store page titles and numbers
-  String _selectedTitle = ""; // Selected title from the dropdown
+  List<Map<String, dynamic>> pageTitles = [];
 
   @override
   void initState() {
@@ -32,13 +31,22 @@ class _HundredDetailState extends State<HundredDetail> {
     loadPdf();
   }
 
-  // Load the PDF from assets and initialize the PdfDocument for text extraction
   loadPdf() async {
     try {
-      String _documentPath = 'assets/files/100-tshiab.pdf';
+      String documentPath = '';
+      if(widget.type == '50'){
+       documentPath = 'assets/files/50.pdf';
+       pageTitles = fiftyTitles;
+      }else if(widget.type == 'tshiab') {
+        documentPath = 'assets/files/100-tshiab.pdf';
+        pageTitles = newHundredTitles;
+      }else {
+        documentPath = 'assets/files/100-qub.pdf';
+        pageTitles = oldHundredTitles;
+      }
 
       // Load the PDF file from assets
-      final file = await getFileFromAsset(_documentPath);
+      final file = await getFileFromAsset(documentPath);
 
       // Initialize PdfDocument for text extraction using Syncfusion
       _pdfDoc = PdfDocument(inputBytes: await file.readAsBytes());
@@ -56,7 +64,6 @@ class _HundredDetailState extends State<HundredDetail> {
     }
   }
 
-  // Utility function to load PDF file from assets
   Future<File> getFileFromAsset(String asset) async {
     try {
       var data = await rootBundle.load(asset);
@@ -71,12 +78,7 @@ class _HundredDetailState extends State<HundredDetail> {
     }
   }
 
-
-  // Function to jump to the selected page in the PDF viewer
   void _jumpToPage({required int pageNumber}) {
-    // setState(() {
-    //   _selectedTitle = title;
-    // });
     controller
         ?.setPage(pageNumber - 1); // PDFView uses 0-based index, so subtract 1
   }
@@ -89,6 +91,7 @@ class _HundredDetailState extends State<HundredDetail> {
         title: Text(widget.title),
         centerTitle: true,
         backgroundColor: const Color(0xff52568F),
+        foregroundColor: Colors.white,
       ),
       body: _isPdfReady
           ? SafeArea(
@@ -108,19 +111,18 @@ class _HundredDetailState extends State<HundredDetail> {
                                 showSearchBox: true,
                                 searchFieldProps: TextFieldProps(
                                   decoration: InputDecoration(
-                                    labelText: "Search",
+                                    labelText: "Search title",
                                     filled: true,
                                     fillColor: Colors.white,
                                     border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
-                                      borderSide: const BorderSide(
-                                        width: 1
-                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide:
+                                          const BorderSide(color: Colors.teal),
                                     ),
                                     contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 24.0),
+                                        vertical: 15.0, horizontal: 20.0),
                                     prefixIcon: const Icon(Icons.search,
-                                        color: Colors.blue),
+                                        color: Color(0xff52568F)),
                                   ),
                                 ),
                                 dialogProps: DialogProps(
@@ -149,18 +151,18 @@ class _HundredDetailState extends State<HundredDetail> {
                                     suffixIcon: null,
                                     fillColor: Colors.grey.shade200),
                               ),
-                              items: newHundredTitles
+                              items: pageTitles
                                   .map((title) => title['title'] as String)
                                   .toList(),
                               onChanged: (String? data) {
-                                // Find the map in newHundredTitles that corresponds to the selected title
-                                final selectedTitle =
-                                    newHundredTitles.firstWhere(
-                                        (title) => title['title'] == data);
+                                // Find the map in fiftyTitles that corresponds to the selected title
+                                final selectedTitle = pageTitles.firstWhere(
+                                    (title) => title['title'] == data);
 
-                                int _pageNumber =
+                                // Now you can access the "pageNumber" value from the map
+                                int pageNumber =
                                     selectedTitle['pageNumber'] as int;
-                                _jumpToPage(pageNumber: _pageNumber);
+                                _jumpToPage(pageNumber: pageNumber);
                               },
                             ),
                           ),

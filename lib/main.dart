@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nkauj_qhuas_vajtswv/home.dart';
+import 'package:nkauj_qhuas_vajtswv/pages/home.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nkauj_qhuas_vajtswv/fifty_detail.dart';
-import 'package:nkauj_qhuas_vajtswv/hundred_detail.dart';
-import 'package:nkauj_qhuas_vajtswv/hundred_old_detail.dart';
+import 'package:nkauj_qhuas_vajtswv/pages/detail_page.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -112,7 +110,7 @@ class _HomeState extends State<Home> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HundredOldDetail(title: title, type: type),
+                builder: (context) => DetailPage(title: title, type: type),
               ));
         },
         child: Container(
@@ -136,7 +134,7 @@ class _HomeState extends State<Home> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => FiftyDetail(title: title, type: type),
+                builder: (context) => DetailPage(title: title, type: type),
               ));
         },
         child: Container(
@@ -159,7 +157,7 @@ class _HomeState extends State<Home> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => HundredDetail(title: title, type: type),
+                builder: (context) => DetailPage(title: title, type: type),
               ));
         },
         child: Container(
